@@ -1,0 +1,54 @@
+import pandas as pd
+import os 
+
+
+# Load the Excel file
+def main(): 
+    sheet_name = 'Sheet1'  # replace with your sheet name if needed
+    # Read the Excel file
+    df = pd.read_csv(r'C:\Users\inder.jaiswal\testPythons\vcfdata.csv', usecols=['numbers', 'contact'])
+    # Extract columns into Python arrays (lists)
+    column1_array = df['numbers'].tolist()  # replace 'Column1' with your actual column name
+    column2_array = df['contact'].tolist()  # replace 'Column1' with your actual column name
+    # column2_array = df['Column2'].tolist()  # replace 'Column2' with your actual column name
+    # Print the arrays
+    print("Column 1:", column1_array)
+    print("Column 2:", column2_array)
+    vcf_file = f'{'contact2v'}.vcf'
+    lengthofA= len(column1_array)
+    print (lengthofA)
+    # loop for calling the function with C#
+    for i in range (0, lengthofA):
+        vcard = make_vcard( column2_array[i], '', '', '',column1_array[i], '', '')
+        write_vcard(vcf_file, vcard)  
+
+def make_vcard(
+        first_name,
+        last_name,
+        company,
+        title,
+        phone,
+        address,
+        email):
+    address_formatted = ';'.join([p.strip() for p in address.split(',')])
+    return [
+        'BEGIN:VCARD',
+        'VERSION:2.1',
+        f'N:{last_name};{first_name}',
+        f'FN:{first_name} {last_name}',
+        f'ORG:{company}',
+        f'TITLE:{title}',
+        f'EMAIL;PREF;INTERNET:{email}',
+        f'TEL;WORK;VOICE:{phone}',
+        f'ADR;WORK;PREF:;;{address_formatted}',
+        f'REV:1',
+        'END:VCARD'
+    ]
+
+def write_vcard(f, vcard):
+    with open(f, 'a') as f:
+        f.writelines([l + '\n' for l in vcard])
+
+
+if __name__ == "__main__":
+    main()    
